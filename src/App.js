@@ -1,10 +1,13 @@
 import GitHub from "./components/GitHub";
+import Header from "./components/Header/Header";
+
+//https://pokeapi.co/api/v2/
 
 function App() {
   return (
     <div className="App">
-      <h1 className="text-3xl font-bold underline">Pokedex</h1>
       <GitHub />
+      <Header />
     </div>
   );
 }
