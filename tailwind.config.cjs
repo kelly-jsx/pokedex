@@ -7,6 +7,7 @@ module.exports = {
         "poke-blue": "#385faa",
         "poke-dark": "#1d2c5e",
         "poke-yellow": "#ffcb05",
+        "poke-yellow-dark": "#c7a008",
       },
     },
   },
