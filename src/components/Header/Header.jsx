@@ -2,7 +2,7 @@ import React from "react";
 import Logo from "../../assets/pokemon.svg";
 import SearchBar from "./SearchBar";
 
-const Header = () => {
+const Header = (props) => {
   return (
     <div
       className={
@@ -10,7 +10,7 @@ const Header = () => {
       }
     >
       <img src={Logo} alt="Pokemon Logo" className="w-3/4 md:w-1/2 lg:w-1/5" />
-      <SearchBar />
+      <SearchBar onSearchChange={props.onSearchChange} />
     </div>
   );
 };

@@ -4,25 +4,21 @@ import axios from "axios";
 import GitHub from "./components/GitHub";
 import Header from "./components/Header/Header";
 import PokeCard from "./components/PokeCard";
-import result from "postcss/lib/result";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       allPokemons: [],
+      searchPokemons: [],
+      isSearch: false,
       limit: 151,
       offset: 0,
-      pokemon: {
-        index: "",
-        name: "",
-        imgUrl: "",
-      },
+      searchField: "",
     };
   }
 
   componentDidMount() {
-    // this.getPokemonInfo();
     this.getAllPokemons(this.state.offset, this.state.limit);
   }
 
@@ -34,8 +30,6 @@ class App extends React.Component {
   };
 
   getPokemonData = async (result) => {
-    // debugger;
-
     const pokemonArr = [];
 
     await Promise.all(
@@ -55,28 +49,58 @@ class App extends React.Component {
       allPokemons: pokemonArr,
       showLoading: false,
     });
-    console.log(this.state.allPokemons);
-    // console.log("allPokes");
+  };
+
+  onSearchChange = (e) => {
+    e.target.value.length > 0
+      ? this.setState({ isSearch: true })
+      : this.setState({ isSearch: false });
+
+    let searchArr = [];
+
+    for (let i = 0; i < this.state.allPokemons.length; i++) {
+      if (
+        this.state.allPokemons[i].name.includes(e.target.value.toLowerCase()) ||
+        this.state.allPokemons[i].id.toString().includes(e.target.value)
+      ) {
+        searchArr.push(this.state.allPokemons[i]);
+      }
+    }
+
+    searchArr.length === 0
+      ? this.setState({ searchPokemons: [] })
+      : this.setState({ searchPokemons: searchArr });
   };
 
   render() {
     return (
       <div className="App m-2">
         <GitHub />
-        <Header />
+        <Header onSearchChange={this.onSearchChange} />
         <div className="poke-list grid grid-cols-6 mt-2 bg-slate-600">
-          {Object.keys(this.state.allPokemons).map((item) => (
-            <PokeCard
-              key={this.state.allPokemons[item].id}
-              index={this.state.allPokemons[item].id}
-              name={this.state.allPokemons[item].name}
-              imgUrl={
-                this.state.allPokemons[item].sprites.other.dream_world
-                  .front_default
-              }
-              // type={this.state.pokemon.types}
-            />
-          ))}
+          {this.state.isSearch
+            ? Object.keys(this.state.searchPokemons).map((item) => (
+                <PokeCard
+                  key={this.state.searchPokemons[item].id}
+                  index={this.state.searchPokemons[item].id}
+                  name={this.state.searchPokemons[item].name}
+                  imgUrl={
+                    this.state.searchPokemons[item].sprites.other.dream_world
+                      .front_default
+                  }
+                />
+              ))
+            : Object.keys(this.state.allPokemons).map((item) => (
+                <PokeCard
+                  key={this.state.allPokemons[item].id}
+                  index={this.state.allPokemons[item].id}
+                  name={this.state.allPokemons[item].name}
+                  imgUrl={
+                    this.state.allPokemons[item].sprites.other.dream_world
+                      .front_default
+                  }
+                />
+              ))}
         </div>
       </div>
     );
