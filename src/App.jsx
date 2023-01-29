@@ -4,12 +4,15 @@ import axios from "axios";
 import GitHub from "./components/GitHub";
 import Header from "./components/Header/Header";
 import PokeCard from "./components/PokeCard";
+import result from "postcss/lib/result";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       allPokemons: [],
+      limit: 151,
+      offset: 0,
       pokemon: {
         index: "",
         name: "",
@@ -19,23 +22,41 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.getPokemonInfo();
+    // this.getPokemonInfo();
+    this.getAllPokemons(this.state.offset, this.state.limit);
   }
 
-  getPokemonInfo = async () => {
-    await axios
-      .get("https://pokeapi.co/api/v2/pokemon/bulbasaur")
-      .then((response) => {
-        const data = response.data;
-        console.log(response.data);
-        this.setState({
-          pokemon: {
-            index: data.id,
-            name: data.name.charAt(0).toUpperCase() + data.name.slice(1),
-            imgUrl: data.sprites.other.dream_world.front_default,
-          },
-        });
-      });
+  getAllPokemons = async (offset, limit) => {
+    const response = await axios
+      .get(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`)
+      .catch((err) => console.log("Error:", err));
+    this.getPokemonData(response.data.results);
+  };
+
+  getPokemonData = async (result) => {
+    // debugger;
+
+    const pokemonArr = [];
+
+    await Promise.all(
+      result.map((pokemonItem) => {
+        return axios
+          .get(`https://pokeapi.co/api/v2/pokemon/${pokemonItem.name}`)
+          .then((result) => {
+            pokemonArr.push(result.data);
+          });
+      })
+    );
+
+    pokemonArr.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
+
+    this.setState({
+      isFilter: false,
+      allPokemons: pokemonArr,
+      showLoading: false,
+    });
+    console.log(this.state.allPokemons);
+    // console.log("allPokes");
   };
 
   render() {
@@ -43,13 +64,19 @@ class App extends React.Component {
       <div className="App m-2">
         <GitHub />
         <Header />
-        <div className="poke-list flex mt-2 bg-slate-600">
-          <PokeCard
-            key={this.state.pokemon.index}
-            index={this.state.pokemon.index}
-            name={this.state.pokemon.name}
-            imgUrl={this.state.pokemon.imgUrl}
-          />
+        <div className="poke-list grid grid-cols-6 mt-2 bg-slate-600">
+          {Object.keys(this.state.allPokemons).map((item) => (
+            <PokeCard
+              key={this.state.allPokemons[item].id}
+              index={this.state.allPokemons[item].id}
+              name={this.state.allPokemons[item].name}
+              imgUrl={
+                this.state.allPokemons[item].sprites.other.dream_world
+                  .front_default
+              }
+              // type={this.state.pokemon.types}
+            />
+          ))}
         </div>
       </div>
     );
