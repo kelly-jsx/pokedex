@@ -77,7 +77,7 @@ class App extends React.Component {
       <div className="App m-2">
         <GitHub />
         <Header onSearchChange={this.onSearchChange} />
-        <div className="poke-list grid grid-cols-6 mt-2 bg-slate-600">
+        <div className="poke-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 mt-2 bg-slate-600">
           {this.state.isSearch
             ? Object.keys(this.state.searchPokemons).map((item) => (
                 <PokeCard
