@@ -6,10 +6,14 @@ const Header = (props) => {
   return (
     <div
       className={
-        "flex flex-col w-screen justify-center items-center text-center mt-2"
+        "flex flex-col w-screen justify-center items-center text-center"
       }
     >
-      <img src={Logo} alt="Pokemon Logo" className="w-3/4 md:w-1/2 lg:w-1/5" />
+      <img
+        src={Logo}
+        alt="Pokemon Logo"
+        className="w-3/4 md:w-1/2 lg:w-1/5 mt-5"
+      />
       <SearchBar onSearchChange={props.onSearchChange} />
     </div>
   );

@@ -74,31 +74,33 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App m-2">
+      <div className="App h-max h-fit dark bg-slate-800">
         <GitHub />
         <Header onSearchChange={this.onSearchChange} />
-        <div className="poke-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 mt-2 bg-slate-600">
+        <div className="poke-list mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 m-2 bg-slate-600">
           {this.state.isSearch
             ? Object.keys(this.state.searchPokemons).map((item) => (
                 <PokeCard
                   key={this.state.searchPokemons[item].id}
-                  index={this.state.searchPokemons[item].id}
+                  id={this.state.searchPokemons[item].id}
                   name={this.state.searchPokemons[item].name}
-                  imgUrl={
+                  image={
                     this.state.searchPokemons[item].sprites.other.dream_world
                       .front_default
                   }
+                  type={this.state.searchPokemons[item].types}
                 />
               ))
             : Object.keys(this.state.allPokemons).map((item) => (
                 <PokeCard
                   key={this.state.allPokemons[item].id}
-                  index={this.state.allPokemons[item].id}
+                  id={this.state.allPokemons[item].id}
                   name={this.state.allPokemons[item].name}
-                  imgUrl={
+                  image={
                     this.state.allPokemons[item].sprites.other.dream_world
                       .front_default
                   }
+                  type={this.state.allPokemons[item].types}
                 />
               ))}
         </div>
