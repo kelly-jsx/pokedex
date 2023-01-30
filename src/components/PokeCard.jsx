@@ -14,9 +14,14 @@ const PokeCard = ({ id, image, name, type }) => {
   }
 
   return (
+    // <div
+    //   className={`poke-card cursor-pointer text-center bg-gradient-to-b from-${finalColor} to-${finalColor2} rounded-2xl m-3 p-3
+    //    transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-1
+    //     `}
+    // >
     <div
-      className={`poke-card cursor-pointer text-center bg-gradient-to-b from-${finalColor} to-${finalColor2} rounded-2xl m-3 p-3
-       transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-1
+      className={`poke-card cursor-pointer text-center bg-poke-blue rounded-lg p-3
+       transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-103 hover:bg-poke-yellow duration-1
         `}
     >
       <p>#{String(id).padStart(3, "0")}</p>
