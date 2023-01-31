@@ -19,11 +19,17 @@ class App extends React.Component {
       // Poke Info
       index: "",
       name: "",
+      category: "",
       imgUrl: "",
       types: [],
       height: "",
       weight: "",
       genderRate: "",
+      description: "",
+      abilities: [],
+      stats: [],
+      evolutions: [],
+      infoOpened: true,
     };
   }
 
@@ -39,6 +45,7 @@ class App extends React.Component {
       .get(`https://pokeapi.co/api/v2/pokemon/bulbasaur`)
       .then((result) => {
         const data = result.data;
+
         this.setState({
           index: data.id,
           name: data.name,
@@ -46,6 +53,8 @@ class App extends React.Component {
           types: data.types,
           height: data.height,
           weight: data.weight,
+          abilities: data.abilities,
+          stats: data.stats,
         });
       });
   };
@@ -55,11 +64,68 @@ class App extends React.Component {
       .get(`https://pokeapi.co/api/v2/pokemon-species/bulbasaur`)
       .then((result) => {
         const data = result.data;
+        let genera;
+        let description;
+
+        // this.getEvoInfo(data.evolution_chain.url);
+
+        for (let i = 0; i < data.genera.length; i++) {
+          if (data.genera[i].language.name === "en") {
+            genera = data.genera[i].genus;
+            break;
+          }
+        }
+
+        for (let i = 0; i < data.flavor_text_entries.length; i++) {
+          if (data.flavor_text_entries[i].language.name === "en") {
+            description = data.flavor_text_entries[i].flavor_text;
+            break;
+          }
+        }
+
         this.setState({
           genderRate: data.gender_rate,
+          category: genera,
+          description: description,
         });
       });
   };
+
+  // getEvoInfo = async (url) => {
+  //   const result = await axios.get(url).catch((err) => console.log(err));
+  //   const evoArr = [];
+  //   let data = result.data.chain;
+  //
+  //   do {
+  //     const evoDetails = data["evolution_details"][0];
+  //
+  //     evoArr.push({
+  //       species_name: data.species.name,
+  //       min_level: !evoDetails ? 1 : evoDetails.min_level,
+  //       trigger_name: !evoDetails ? null : evoDetails.trigger.name,
+  //       item: !evoDetails ? null : evoDetails.item,
+  //     });
+  //   } while (!!data && data.hasOwnProperty("evolves_to"));
+  //
+  //   this.getEvoImg(evoArr);
+  // };
+  //
+  // getEvoImg = async (evoArr) => {
+  //   for (let i = 0; i < evoArr.length; i++) {
+  //     const result = await axios
+  //       .get(`https://pokeapi.co/api/v2/pokemon/${evoArr[i].species_name}`)
+  //       .catch((err) => console.log("Error:", err));
+  //     result.data.sprites.other.dream_world.front_default
+  //       ? (evoArr[i]["image_url"] =
+  //           result.data.sprites.other.dream_world.front_default)
+  //       : (evoArr[i]["image_url"] =
+  //           result.data.sprites.other["official-artwork"].front_default);
+  //   }
+  //
+  //   this.setState({
+  //     evolutions: evoArr,
+  //   });
+  // };
 
   getAllPokemons = async (offset, limit) => {
     const response = await axios
@@ -115,22 +181,16 @@ class App extends React.Component {
       : this.setState({ searchPokemons: searchArr });
   };
 
+  onClickCloseInfo = (event) => {
+    this.setState({ infoOpened: false });
+  };
+
   render() {
     return (
-      <div className="h-full dark bg-slate-800">
-        <div>
+      <div className="h-full dark bg-slate-800 text-white pt-4">
+        <div className={this.state.infoOpened ? "blur" : ""}>
           <GitHub />
           <Header onSearchChange={this.onSearchChange} />
-          {/*<PokeInfo*/}
-          {/*  key={this.state.index}*/}
-          {/*  index={this.state.index}*/}
-          {/*  name={this.state.name}*/}
-          {/*  imgUrl={this.state.imgUrl}*/}
-          {/*  type={this.state.types}*/}
-          {/*  height={this.state.height}*/}
-          {/*  weight={this.state.weight}*/}
-          {/*  genderRate={this.state.genderRate}*/}
-          {/*/>*/}
           <div className="mt-5 grid mx-4 pb-4 gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7">
             {this.state.isSearch
               ? Object.keys(this.state.searchPokemons).map((item) => (
@@ -159,6 +219,22 @@ class App extends React.Component {
                 ))}
           </div>
         </div>
+        <PokeInfo
+          key={this.state.index}
+          index={this.state.index}
+          name={this.state.name}
+          imgUrl={this.state.imgUrl}
+          type={this.state.types}
+          height={this.state.height}
+          weight={this.state.weight}
+          genderRate={this.state.genderRate}
+          category={this.state.category}
+          description={this.state.description}
+          abilities={this.state.abilities}
+          stats={this.state.stats}
+          isOpened={this.state.infoOpened}
+          onClickHandle={() => this.onClickCloseInfo()}
+        />
       </div>
     );
   }
