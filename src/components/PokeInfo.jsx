@@ -4,7 +4,7 @@ const PokeInfo = (pokemon) => {
   return (
     <div
       className={`${
-        pokemon.isOpened ? "" : "invisible"
+        pokemon.isOpened ? "" : "hidden"
       } w-100 lg:w-3/4 mx-4 absolute lg:sticky inset-y-32 lg:top-12 lg:inset-x-40 lg:inset-y-28 items-center overflow-auto`}
     >
       <div

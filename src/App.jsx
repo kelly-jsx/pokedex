@@ -29,7 +29,7 @@ class App extends React.Component {
       abilities: [],
       stats: [],
       evolutions: [],
-      infoOpened: true,
+      infoOpened: false,
     };
   }
 
@@ -182,7 +182,7 @@ class App extends React.Component {
   };
 
   onClickCloseInfo = (event) => {
-    this.setState({ infoOpened: false });
+    this.setState({ infoOpened: event });
   };
 
   render() {
@@ -203,6 +203,7 @@ class App extends React.Component {
                         .front_default
                     }
                     type={this.state.searchPokemons[item].types}
+                    onClickHandle={() => this.onClickCloseInfo(true)}
                   />
                 ))
               : Object.keys(this.state.allPokemons).map((item) => (
@@ -215,6 +216,7 @@ class App extends React.Component {
                         .front_default
                     }
                     type={this.state.allPokemons[item].types}
+                    onClickHandle={() => this.onClickCloseInfo(true)}
                   />
                 ))}
           </div>
@@ -233,7 +235,7 @@ class App extends React.Component {
           abilities={this.state.abilities}
           stats={this.state.stats}
           isOpened={this.state.infoOpened}
-          onClickHandle={() => this.onClickCloseInfo()}
+          onClickHandle={() => this.onClickCloseInfo(false)}
         />
       </div>
     );
