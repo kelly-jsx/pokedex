@@ -35,14 +35,14 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getAllPokemons(this.state.offset, this.state.limit);
-    this.getPokemonInfo();
-    this.getPokemonSpecies();
+    // this.getPokemonInfo();
+    // this.getPokemonSpecies();
     // bulbasaur for test
   }
 
-  getPokemonInfo = async () => {
+  getPokemonInfo = async (pokemonName) => {
     return axios
-      .get(`https://pokeapi.co/api/v2/pokemon/bulbasaur`)
+      .get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
       .then((result) => {
         const data = result.data;
 
@@ -59,36 +59,39 @@ class App extends React.Component {
       });
   };
 
-  getPokemonSpecies = async () => {
-    return axios
-      .get(`https://pokeapi.co/api/v2/pokemon-species/bulbasaur`)
-      .then((result) => {
-        const data = result.data;
-        let genera;
-        let description;
+  getPokemonSpecies = async (pokemonName) => {
+    return (
+      axios
+        .get(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`)
+        // .get(`https://pokeapi.co/api/v2/pokemon-species/bulbasaur`)
+        .then((result) => {
+          const data = result.data;
+          let genera;
+          let description;
 
-        // this.getEvoInfo(data.evolution_chain.url);
+          // this.getEvoInfo(data.evolution_chain.url);
 
-        for (let i = 0; i < data.genera.length; i++) {
-          if (data.genera[i].language.name === "en") {
-            genera = data.genera[i].genus;
-            break;
+          for (let i = 0; i < data.genera.length; i++) {
+            if (data.genera[i].language.name === "en") {
+              genera = data.genera[i].genus;
+              break;
+            }
           }
-        }
 
-        for (let i = 0; i < data.flavor_text_entries.length; i++) {
-          if (data.flavor_text_entries[i].language.name === "en") {
-            description = data.flavor_text_entries[i].flavor_text;
-            break;
+          for (let j = 0; j < data.flavor_text_entries.length; j++) {
+            if (data.flavor_text_entries[j].language.name === "en") {
+              description = data.flavor_text_entries[j].flavor_text;
+              break;
+            }
           }
-        }
 
-        this.setState({
-          genderRate: data.gender_rate,
-          category: genera,
-          description: description,
-        });
-      });
+          this.setState({
+            genderRate: data.gender_rate,
+            category: genera,
+            description: description,
+          });
+        })
+    );
   };
 
   // getEvoInfo = async (url) => {
@@ -181,7 +184,9 @@ class App extends React.Component {
       : this.setState({ searchPokemons: searchArr });
   };
 
-  onClickCloseInfo = (event) => {
+  onClickSetInfo = (event, pokemonName) => {
+    this.getPokemonInfo(pokemonName);
+    this.getPokemonSpecies(pokemonName);
     this.setState({ infoOpened: event });
   };
 
@@ -203,7 +208,12 @@ class App extends React.Component {
                         .front_default
                     }
                     type={this.state.searchPokemons[item].types}
-                    onClickHandle={() => this.onClickCloseInfo(true)}
+                    onClickHandle={() =>
+                      this.onClickSetInfo(
+                        true,
+                        this.state.searchPokemons[item].name
+                      )
+                    }
                   />
                 ))
               : Object.keys(this.state.allPokemons).map((item) => (
@@ -216,7 +226,12 @@ class App extends React.Component {
                         .front_default
                     }
                     type={this.state.allPokemons[item].types}
-                    onClickHandle={() => this.onClickCloseInfo(true)}
+                    onClickHandle={() =>
+                      this.onClickSetInfo(
+                        true,
+                        this.state.allPokemons[item].name
+                      )
+                    }
                   />
                 ))}
           </div>
@@ -235,7 +250,7 @@ class App extends React.Component {
           abilities={this.state.abilities}
           stats={this.state.stats}
           isOpened={this.state.infoOpened}
-          onClickHandle={() => this.onClickCloseInfo(false)}
+          onClickHandle={() => this.onClickSetInfo(false)}
         />
       </div>
     );
