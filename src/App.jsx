@@ -5,6 +5,7 @@ import GitHub from "./components/GitHub";
 import Header from "./components/Header/Header";
 import PokeCard from "./components/PokeCard";
 import PokeInfo from "./components/PokeInfo";
+import Footer from "./components/footer";
 
 class App extends React.Component {
   constructor(props) {
@@ -235,6 +236,7 @@ class App extends React.Component {
                   />
                 ))}
           </div>
+          <Footer />
         </div>
         <PokeInfo
           key={this.state.index}

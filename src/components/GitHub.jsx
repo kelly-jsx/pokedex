@@ -3,7 +3,7 @@ import GitHubLogo from "../assets/github.svg";
 
 const GitHub = () => {
   return (
-    <div className={"fixed bottom-5 right-5"}>
+    <div className={"absolute top-5 right-5"}>
       <a
         href="https://github.com/kelly-jsx/pokedex"
         target="_blank"

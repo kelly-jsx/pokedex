@@ -10,7 +10,7 @@ const PokeInfo = (pokemon) => {
     >
       <div className="fixed inset-0"></div>
 
-      <div className="fixed inset-0 sm:inset-y-28 z-10 overflow-y-auto w-full lg:w-3/4 mx-auto">
+      <div className="fixed inset-0 sm:inset-y-28 z-10 overflow-y-auto w-full lg:w-3/4 2xl:w-3/5 mx-auto">
         <div
           className={
             "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 bg-blue-500 p-4 gap-4 rounded-lg"
@@ -81,19 +81,19 @@ const PokeInfo = (pokemon) => {
           </div>
           <div className="min-w-full sm:hidden flex flex-col items-center">
             <button
-              className="cursor-pointer rounded-lg bg-poke-yellow w-32 h-10 mt-2"
+              className="cursor-pointer rounded-lg bg-poke-yellow w-32 h-10 mt-2 font-bold"
               onClick={pokemon.onClickHandle}
             >
-              X CLOSE
+              CLOSE
             </button>
           </div>
         </div>
         <div className="min-w-full hidden sm:flex flex-col items-center">
           <button
-            className="transition ease-in-out cursor-pointer rounded-lg bg-poke-yellow hover:bg-red-600 duration-300 w-32 h-10 mt-2"
+            className="transition ease-in-out cursor-pointer rounded-lg bg-poke-yellow hover:bg-red-600 duration-300 w-32 h-10 mt-2 font-bold"
             onClick={pokemon.onClickHandle}
           >
-            X CLOSE
+            CLOSE
           </button>
         </div>
       </div>
